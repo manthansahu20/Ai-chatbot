@@ -1,59 +1,33 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ChatGPT-style Chat UI</title>
-  <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Chatbot</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="app">
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <h2>My Chat</h2>
-        <button id="newChatBtn" class="btn small">+ New Chat</button>
-      </div>
-
-      <div id="conversations" class="conversations"></div>
-
-      <div class="sidebar-footer">
-        <button id="themeToggle" class="btn">🌙</button>
-        <small class="muted">Local UI • No backend</small>
-      </div>
-    </aside>
-
-    <main class="chat-area">
-      <header class="chat-header">
-        <div class="chat-title">ChatGPT UI</div>
-        <div class="chat-actions">
-          <button id="voiceBtn" class="btn" title="Voice input">🎤</button>
-          <button id="clearBtn" class="btn" title="Clear current conversation">🗑️</button>
-        </div>
-      </header>
-
-      <section id="messages" class="messages" aria-live="polite"></section>
-
-      <div class="composer">
-        <div class="input-wrap">
-          <input id="messageInput" placeholder="Type a message..." autocomplete="off" />
-        </div>
-        <div class="controls">
-          <button id="sendBtn" class="btn primary">Send</button>
-        </div>
-      </div>
-    </main>
+  <div class="sidebar">
+    <div class="new-chat">+ New Chat</div>
+    <div class="chats-list" id="chatsList">
+      <p class="empty">No previous chats</p>
+    </div>
   </div>
 
-  <template id="msg-template">
-    <div class="message">
-      <div class="bubble"></div>
-      <div class="meta">
-        <button class="copy-btn btn tiny">Copy</button>
-        <span class="time muted"></span>
-      </div>
+  <div class="main">
+    <div class="header">
+      <h2>AI Chatbot</h2>
+      <button id="modeBtn">🌙</button>
     </div>
-  </template>
 
-<script src="js/app.js"></script>
+    <div class="chatbox" id="chatbox"></div>
+
+    <div class="input-area">
+      <input type="text" id="inputMsg" placeholder="Type your message..." />
+      <button id="sendBtn">Send</button>
+    </div>
+  </div>
+
+<script src="script.js"></script>
 </body>
 </html>
