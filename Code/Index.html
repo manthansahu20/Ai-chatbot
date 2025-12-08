@@ -1,28 +1,59 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced AI Chatbot</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ChatGPT-style Chat UI</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>My Chat</h2>
+        <button id="newChatBtn" class="btn small">+ New Chat</button>
+      </div>
 
-<div class="chat-container">
-    
-    <div class="header">🤖 ADVANCED AI CHATBOT</div>
+      <div id="conversations" class="conversations"></div>
 
-    <div class="chat-box" id="chatBox"></div>
+      <div class="sidebar-footer">
+        <button id="themeToggle" class="btn">🌙</button>
+        <small class="muted">Local UI • No backend</small>
+      </div>
+    </aside>
 
-    <div id="typing" class="typing">Bot is typing...</div>
+    <main class="chat-area">
+      <header class="chat-header">
+        <div class="chat-title">ChatGPT UI</div>
+        <div class="chat-actions">
+          <button id="voiceBtn" class="btn" title="Voice input">🎤</button>
+          <button id="clearBtn" class="btn" title="Clear current conversation">🗑️</button>
+        </div>
+      </header>
 
-    <div class="input-area">
-        <input type="text" id="userInput" placeholder="Type message..." onkeypress="if(event.key==='Enter') sendMessage()">
-        <button onclick="sendMessage()">Send</button>
+      <section id="messages" class="messages" aria-live="polite"></section>
+
+      <div class="composer">
+        <div class="input-wrap">
+          <input id="messageInput" placeholder="Type a message..." autocomplete="off" />
+        </div>
+        <div class="controls">
+          <button id="sendBtn" class="btn primary">Send</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <template id="msg-template">
+    <div class="message">
+      <div class="bubble"></div>
+      <div class="meta">
+        <button class="copy-btn btn tiny">Copy</button>
+        <span class="time muted"></span>
+      </div>
     </div>
+  </template>
 
-</div>
-
-<script src="script.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>
