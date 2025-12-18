@@ -3,164 +3,241 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ChatGPT-style Chatbot</title>
+<title>Ultra Advanced Chatbot</title>
+
 <style>
-    /* --------- Basic Reset --------- */
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+:root{
+  --bg:#0b1220;
+  --card:#111827;
+  --user:#2563eb;
+  --bot:#1f2937;
+  --text:#e5e7eb;
+  --accent:#38bdf8;
+}
+.light{
+  --bg:#f4f6fa;
+  --card:#ffffff;
+  --user:#2563eb;
+  --bot:#e5e7eb;
+  --text:#111827;
+  --accent:#2563eb;
+}
 
-    body {
-        background: #f5f5f5;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
+*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI}
 
-    /* --------- Chat Container --------- */
-    .chat-container {
-        width: 400px;
-        max-width: 90%;
-        background: #fff;
-        border-radius: 15px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-    }
+body{
+  background:var(--bg);
+  color:var(--text);
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
 
-    /* --------- Chat Header --------- */
-    .chat-header {
-        background: #4b79a1;
-        color: #fff;
-        padding: 15px;
-        text-align: center;
-        font-size: 1.2em;
-        font-weight: bold;
-    }
+.chat{
+  width:440px;
+  max-width:95%;
+  background:var(--card);
+  border-radius:18px;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  box-shadow:0 25px 50px rgba(0,0,0,.4);
+}
 
-    /* --------- Chat Messages --------- */
-    .chat-messages {
-        flex: 1;
-        padding: 15px;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        background: #e5e5e5;
-    }
+/* Header */
+.header{
+  padding:14px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:rgba(255,255,255,.03);
+  backdrop-filter:blur(10px);
+}
+.header span{color:var(--accent);font-weight:600}
+.header button{
+  background:none;border:none;color:var(--accent);
+  cursor:pointer;font-size:14px;
+}
 
-    .message {
-        max-width: 70%;
-        padding: 10px 15px;
-        border-radius: 20px;
-        position: relative;
-        word-wrap: break-word;
-    }
+/* Messages */
+.messages{
+  flex:1;
+  padding:14px;
+  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
 
-    .user-message {
-        background: #4b79a1;
-        color: #fff;
-        align-self: flex-end;
-        border-bottom-right-radius: 0;
-    }
+.msg{
+  max-width:78%;
+  padding:12px 14px;
+  border-radius:14px;
+  animation:pop .25s ease;
+  position:relative;
+}
+.user{align-self:flex-end;background:var(--user);color:#fff}
+.bot{align-self:flex-start;background:var(--bot)}
 
-    .bot-message {
-        background: #d3d3d3;
-        color: #000;
-        align-self: flex-start;
-        border-bottom-left-radius: 0;
-    }
+.actions{
+  position:absolute;
+  right:6px;
+  top:-18px;
+  font-size:12px;
+  opacity:.6;
+  cursor:pointer;
+}
 
-    /* --------- Chat Input --------- */
-    .chat-input {
-        display: flex;
-        border-top: 1px solid #ccc;
-        background: #fff;
-    }
+.reactions span{
+  margin-right:6px;
+  cursor:pointer;
+}
 
-    .chat-input input {
-        flex: 1;
-        padding: 15px;
-        border: none;
-        outline: none;
-        font-size: 1em;
-        border-radius: 0;
-    }
+/* Input */
+.input{
+  display:flex;
+  border-top:1px solid rgba(255,255,255,.1);
+}
+textarea{
+  flex:1;
+  background:none;
+  border:none;
+  color:var(--text);
+  padding:12px;
+  resize:none;
+}
+button.send{
+  background:var(--accent);
+  border:none;
+  padding:0 18px;
+  cursor:pointer;
+}
 
-    .chat-input button {
-        padding: 0 20px;
-        background: #4b79a1;
-        color: #fff;
-        border: none;
-        cursor: pointer;
-        font-size: 1em;
-        transition: background 0.3s;
-    }
-
-    .chat-input button:hover {
-        background: #395a7f;
-    }
+/* Animations */
+@keyframes pop{
+  from{opacity:0;transform:translateY(6px)}
+  to{opacity:1}
+}
+.typing{font-style:italic;opacity:.6}
 </style>
 </head>
 <body>
 
-<div class="chat-container">
-    <div class="chat-header">ChatGPT Bot</div>
-    <div class="chat-messages" id="chatMessages"></div>
-    <div class="chat-input">
-        <input type="text" id="userInput" placeholder="Type a message..." />
-        <button onclick="sendMessage()">Send</button>
+<div class="chat" id="app">
+  <div class="header">
+    <span>Advanced AI Bot</span>
+    <div>
+      <button onclick="toggleTheme()">Theme</button>
+      <button onclick="exportChat()">Export</button>
     </div>
+  </div>
+
+  <div class="messages" id="msgs"></div>
+
+  <div class="input">
+    <textarea id="input" rows="1" placeholder="Ask anything..."></textarea>
+    <button class="send" onclick="send()">➤</button>
+  </div>
 </div>
 
 <script>
-    const chatMessages = document.getElementById('chatMessages');
-    const userInput = document.getElementById('userInput');
+const msgs=document.getElementById("msgs");
+const input=document.getElementById("input");
+let memory=[];
 
-    function appendMessage(message, className) {
-        const msgDiv = document.createElement('div');
-        msgDiv.classList.add('message', className);
-        msgDiv.textContent = message;
-        chatMessages.appendChild(msgDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
+/* Load */
+window.onload=()=>{
+  const data=JSON.parse(localStorage.getItem("chatX"))||[];
+  data.forEach(m=>addMsg(m.text,m.type,false));
+};
 
-    function botReply(userMessage) {
-        // Simple dummy responses
-        let reply = "Sorry, I can't understand that.";
+/* Message */
+function addMsg(text,type,save=true){
+  const div=document.createElement("div");
+  div.className=`msg ${type}`;
+  div.innerHTML=`
+    ${text}
+    <div class="actions" onclick="this.parentElement.remove()">🗑</div>
+    <div class="reactions">
+      <span>👍</span><span>❤️</span><span>😂</span>
+    </div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop=msgs.scrollHeight;
 
-        if(userMessage.toLowerCase().includes("hi") || userMessage.toLowerCase().includes("hello")) {
-            reply = "Hello! How can I help you today?";
-        } else if(userMessage.toLowerCase().includes("how are you")) {
-            reply = "I'm just a bot, but I'm doing great!";
-        } else if(userMessage.toLowerCase().includes("your name")) {
-            reply = "I'm your friendly ChatGPT bot!";
-        }
+  if(save){
+    const hist=JSON.parse(localStorage.getItem("chatX"))||[];
+    hist.push({text,type});
+    localStorage.setItem("chatX",JSON.stringify(hist));
+  }
+}
 
-        appendMessage(reply, 'bot-message');
-    }
+/* Typing effect */
+function typeBot(text){
+  const div=document.createElement("div");
+  div.className="msg bot";
+  msgs.appendChild(div);
+  let i=0;
+  const t=setInterval(()=>{
+    div.textContent+=text.charAt(i);
+    i++;
+    msgs.scrollTop=msgs.scrollHeight;
+    if(i>=text.length) clearInterval(t);
+  },25);
+}
 
-    function sendMessage() {
-        const message = userInput.value.trim();
-        if(message === "") return;
+/* Send */
+function send(){
+  const text=input.value.trim();
+  if(!text)return;
+  addMsg(text,"user");
+  memory.push(text);
+  input.value="";
 
-        appendMessage(message, 'user-message');
-        userInput.value = "";
+  const typing=document.createElement("div");
+  typing.className="typing";
+  typing.textContent="Bot is thinking...";
+  msgs.appendChild(typing);
 
-        setTimeout(() => {
-            botReply(message);
-        }, 500);
-    }
+  setTimeout(()=>{
+    typing.remove();
+    botReply(text);
+  },800);
+}
 
-    // Press Enter to send message
-    userInput.addEventListener('keypress', function(e) {
-        if(e.key === 'Enter') sendMessage();
-    });
+/* Smart bot */
+function botReply(msg){
+  let reply="Interesting 🤔";
+  msg=msg.toLowerCase();
+
+  if(msg.includes("sports")) reply="You are building a Sports Tournament Management System 🏆";
+  else if(msg.includes("backend")) reply="Node.js + Express + MongoDB is perfect 🔥";
+  else if(msg.includes("remember")) reply=`I remember you said: "${memory[memory.length-2]}"`;
+
+  typeBot(reply);
+}
+
+/* Theme */
+function toggleTheme(){
+  document.body.classList.toggle("light");
+}
+
+/* Export */
+function exportChat(){
+  const data=localStorage.getItem("chatX");
+  const blob=new Blob([data],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="chat.json";
+  a.click();
+}
+
+/* Enter */
+input.addEventListener("keydown",e=>{
+  if(e.key==="Enter"&&!e.shiftKey){
+    e.preventDefault();send();
+  }
+});
 </script>
 
 </body>
